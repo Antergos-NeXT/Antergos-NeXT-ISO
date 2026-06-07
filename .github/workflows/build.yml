@@ -60,5 +60,9 @@ jobs:
           --metadata="title:Antergos NeXT Live ISO" \
           --metadata="creator:Antergos NeXT" \
           --metadata="date:$(date +%Y-%m-%d)" \
+          --metadata="year:$(date +%Y)" \
           --metadata="description:Antergos NeXT live installation ISO based on Arch Linux" \
+          --metadata="subject:Antergos NeXT; Arch Linux; live ISO; Linux distribution" \
+          --metadata="language:eng" \
+          --metadata="mediatype:software" \
           --metadata="collection:opensource"
