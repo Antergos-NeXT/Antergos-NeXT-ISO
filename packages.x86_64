@@ -119,7 +119,6 @@ bash-completion
 dmidecode
 dialog
 dmraid
-downgrade
 duf
 fakeroot
 freetype2
@@ -186,7 +185,6 @@ firewall-applet
 
 ## Live iso specific
 arch-install-scripts
-iso-create-ml
 memtest86+
 memtest86+-efi
 mkinitcpio-archiso
@@ -276,7 +274,6 @@ ttf-opensans
 
 ## General
 antergos-wallpapers
-antergos-welcome
 yay
 
 ## Installer

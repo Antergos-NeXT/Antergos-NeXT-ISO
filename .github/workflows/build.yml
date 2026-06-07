@@ -23,10 +23,17 @@ jobs:
           git \
           squashfs-tools \
           wget \
-          imagemagick
+          imagemagick \
+          sudo
+
+    - name: Create build user
+      run: |
+        useradd -m builder
+        echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+        chown -R builder:builder .
 
     - name: Prepare
-      run: ./prepare.sh
+      run: sudo -u builder ./prepare.sh
 
     - name: Build ISO
       run: ./mkarchiso -v "."
