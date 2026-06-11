@@ -27,7 +27,12 @@ COUNTRY="$(get_country)"
 # all path must be in quotation marks "path/to/file/or/folder" for now.
 
 arch_chroot() {
-    arch-chroot "${script_path}/${work_dir}/x86_64/airootfs" /bin/bash -c "${1}"
+    local airootfs
+    case "${work_dir}" in
+        /*) airootfs="${work_dir}/x86_64/airootfs" ;;
+        *)  airootfs="${script_path}/${work_dir}/x86_64/airootfs" ;;
+    esac
+    arch-chroot "${airootfs}" /bin/bash -c "${1}"
 }
 
 do_merge() {
