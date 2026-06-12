@@ -56,5 +56,66 @@ jobs:
         printf '%s' "$SF_SSH_KEY" > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts 2>/dev/null
+
+        # Find ISO
         ISO=$(ls out/*.iso | head -1)
-        rsync -avP "$ISO" "antergos-txen@frs.sourceforge.net:/home/frs/project/antergos-next/"
+        DATE=$(date +%Y.%m.%d)
+        REMOTE_DIR="/home/frs/project/antergos-next/${DATE}"
+
+        # Validate ISO exists
+        if [[ -z "$ISO" || ! -f "$ISO" ]]; then
+          echo "ERROR: No ISO found!"
+          exit 1
+        fi
+
+        # Check ISO size (must be > 500MB)
+        SIZE=$(stat -c%s "$ISO")
+        if [[ $SIZE -lt 524288000 ]]; then
+          echo "WARNING: ISO is smaller than expected (${SIZE} bytes), attempting salvage..."
+          # Try to salvage: check if it's a valid iso9660
+          if file "$ISO" | grep -q "ISO 9660\|UDF"; then
+            echo "ISO appears valid, proceeding..."
+          else
+            echo "ERROR: ISO is corrupted!"
+            exit 1
+          fi
+        fi
+
+        # Generate README
+        cat > README.md << 'EOF'
+# Antergos NeXT Live ISO
+
+## Build Info
+- **Date**: DATE_PLACEHOLDER
+- **Version**: rolling
+- **Architecture**: x86_64
+
+## Desktop Environments
+- KDE Plasma (default)
+- GNOME
+- XFCE
+- Cinnamon
+- And more...
+
+## Installation
+1. Boot from ISO
+2. Select desktop environment
+3. FollowCnchi installer
+
+## Issues
+Report at: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO/issues
+
+## Source
+- ISO Build: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO
+- Cnchi Installer: https://github.com/Antergos-NeXT/Cnchi
+EOF
+        sed -i "s/DATE_PLACEHOLDER/$DATE/" README.md
+
+        # Check if ISO already exists
+        if ssh antergos-txen@frs.sourceforge.net ls "${REMOTE_DIR}/"*.iso &>/dev/null; then
+          echo "ISO already exists in ${DATE}, skipping upload"
+        else
+          # Upload ISO + README
+          rsync -avP "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
+          echo "Uploaded to ${REMOTE_DIR}"
+        fi

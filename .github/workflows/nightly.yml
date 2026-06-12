@@ -1,0 +1,135 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # Daily at 3 AM
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+      options: --privileged
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        pacman -Syu --noconfirm --needed \
+          archiso \
+          git \
+          squashfs-tools \
+          wget \
+          imagemagick \
+          sudo \
+          base-devel \
+          python-pip
+
+    - name: Create build user
+      run: |
+        useradd -m builder
+        echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+        chown -R builder:builder .
+
+    - name: Prepare
+      run: sudo -u builder ./prepare.sh
+
+    - name: Build ISO
+      run: |
+        # Rename output to include -nightly
+        ./mkarchiso -v "."
+        mv out/*.iso out/$(echo out/*.iso | sed 's/-x86_64/-x86_64-nightly/')
+
+    - name: Upload ISO artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Antergos-NeXT-Nightly
+        path: out/
+
+    - name: Upload to SourceForge
+      env:
+        SF_SSH_KEY: ${{ secrets.SF_SSH_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        printf '%s' "$SF_SSH_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts 2>/dev/null
+
+        # Find ISO (now with -nightly in name)
+        ISO=$(ls out/*-nightly*.iso | head -1)
+        REMOTE_DIR="/home/frs/project/antergos-next/nightly"
+
+        # Validate ISO exists
+        if [[ -z "$ISO" || ! -f "$ISO" ]]; then
+          echo "ERROR: No ISO found!"
+          exit 1
+        fi
+
+        # Check ISO size (must be > 500MB)
+        SIZE=$(stat -c%s "$ISO")
+        if [[ $SIZE -lt 524288000 ]]; then
+          echo "WARNING: ISO is smaller than expected (${SIZE} bytes), attempting salvage..."
+          if file "$ISO" | grep -q "ISO 9660\|UDF"; then
+            echo "ISO appears valid, proceeding..."
+          else
+            echo "ERROR: ISO is corrupted!"
+            exit 1
+          fi
+        fi
+
+        # Generate README for nightly
+        cat > README.md << 'EOF'
+# ⚠️ Antergos NeXT Nightly ISO
+
+## ⚠️ WARNING - NOT FOR PRODUCTION USE
+
+**This is a NIGHTLY build. Use at your own risk!**
+
+### What is Nightly?
+- Built automatically every day from the latest master branch
+- May or may NOT include new Cnchi GTK4 from cnchi-dev branch - it's a GAMBLE!
+- May contain untested changes or broken features
+- NOT recommended for production systems
+
+### NO WARRANTY
+
+```
+THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
+THERE ARE NO EXPRESS OR IMPLIED WARRANTIES INCLUDING, BUT NOT LIMITED TO,
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+YOU ASSUME ALL RISK FOR ANY ISSUES OR DAMAGE.
+```
+
+### Known Issues (may include):
+- Cnchi installer may give traceback errors
+- NEW Cnchi GTK4 from cnchi-dev branch (may be unstable)
+- Syslinux/bootloader errors
+- Broken desktop environments
+- Missing or broken packages
+- Any other bug that slipped in today
+
+### Issues
+DO NOT report issues for nightly builds - fix them yourself or wait for the next stable release.
+
+### Build Info
+- **Date**: DATE_PLACEHOLDER
+- **Type**: nightly build
+- **Status**: UNTESTED
+
+## Installation (at your own risk!)
+1. Boot from ISO
+2. Select desktop environment
+3. Run Cnchi installer
+4. Don't come crying to us if it breaks
+
+## Source
+- ISO Build: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO
+- Cnchi Installer: https://github.com/Antergos-NeXT/Cnchi
+EOF
+        sed -i "s/DATE_PLACEHOLDER/$(date +%Y.%m.%d)/" README.md
+
+        # Upload to nightly folder (overwrite allowed)
+        rsync -avP --delete "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
+        echo "Uploaded nightly to ${REMOTE_DIR}"
