@@ -2,7 +2,7 @@ name: Nightly Build
 
 on:
   schedule:
-    - cron: '0 3 * * *'  # Daily at 3 AM
+    - cron: '0 3 * * *'
   workflow_dispatch:
 
 jobs:
@@ -38,7 +38,6 @@ jobs:
 
     - name: Build ISO
       run: |
-        # Rename output to include -nightly
         ./mkarchiso -v "."
         mv out/*.iso out/$(echo out/*.iso | sed 's/-x86_64/-x86_64-nightly/')
 
@@ -57,7 +56,7 @@ jobs:
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts 2>/dev/null
 
-        # Find ISO (now with -nightly in name)
+        # Find ISO
         ISO=$(ls out/*-nightly*.iso | head -1)
         REMOTE_DIR="/home/frs/project/antergos-next/nightly"
 
@@ -67,10 +66,10 @@ jobs:
           exit 1
         fi
 
-        # Check ISO size (must be > 500MB)
+        # Check ISO size
         SIZE=$(stat -c%s "$ISO")
         if [[ $SIZE -lt 524288000 ]]; then
-          echo "WARNING: ISO is smaller than expected (${SIZE} bytes), attempting salvage..."
+          echo "WARNING: ISO smaller than expected (${SIZE} bytes), checking..."
           if file "$ISO" | grep -q "ISO 9660\|UDF"; then
             echo "ISO appears valid, proceeding..."
           else
@@ -79,56 +78,53 @@ jobs:
           fi
         fi
 
-        # Generate README for nightly
-        cat > README.md << 'EOF'
-# ⚠️ Antergos NeXT Nightly ISO
-
-## ⚠️ WARNING - NOT FOR PRODUCTION USE
-
-**This is a NIGHTLY build. Use at your own risk!**
-
-### What is Nightly?
-- Built automatically every day from the latest master branch
-- May or may NOT include new Cnchi GTK4 from cnchi-dev branch - it's a GAMBLE!
-- May contain untested changes or broken features
-- NOT recommended for production systems
-
-### NO WARRANTY
-
-```
-THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
-THERE ARE NO EXPRESS OR IMPLIED WARRANTIES INCLUDING, BUT NOT LIMITED TO,
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-YOU ASSUME ALL RISK FOR ANY ISSUES OR DAMAGE.
-```
-
-### Known Issues (may include):
-- Cnchi installer may give traceback errors
-- NEW Cnchi GTK4 from cnchi-dev branch (may be unstable)
-- Syslinux/bootloader errors
-- Broken desktop environments
-- Missing or broken packages
-- Any other bug that slipped in today
-
-### Issues
-DO NOT report issues for nightly builds - fix them yourself or wait for the next stable release.
-
-### Build Info
-- **Date**: DATE_PLACEHOLDER
-- **Type**: nightly build
-- **Status**: UNTESTED
-
-## Installation (at your own risk!)
-1. Boot from ISO
-2. Select desktop environment
-3. Run Cnchi installer
-4. Don't come crying to us if it breaks
-
-## Source
-- ISO Build: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO
-- Cnchi Installer: https://github.com/Antergos-NeXT/Cnchi
-EOF
-        sed -i "s/DATE_PLACEHOLDER/$(date +%Y.%m.%d)/" README.md
+        # Create README
+        DATE=$(date +%Y.%m.%d)
+        echo "# ⚠️ Antergos NeXT Nightly ISO" > README.md
+        echo "" >> README.md
+        echo "## ⚠️ WARNING - NOT FOR PRODUCTION USE" >> README.md
+        echo "" >> README.md
+        echo "**This is a NIGHTLY build. Use at your own risk!**" >> README.md
+        echo "" >> README.md
+        echo "### What is Nightly?" >> README.md
+        echo "- Built automatically every day from the latest master branch" >> README.md
+        echo "- May or may NOT include new Cnchi GTK4 from cnchi-dev branch - it is a GAMBLE!" >> README.md
+        echo "- May contain untested changes or broken features" >> README.md
+        echo "- NOT recommended for production systems" >> README.md
+        echo "" >> README.md
+        echo "### NO WARRANTY" >> README.md
+        echo "```" >> README.md
+        echo "THIS SOFTWARE IS PROVIDED \"AS IS\" WITHOUT WARRANTY OF ANY KIND." >> README.md
+        echo "THERE ARE NO EXPRESS OR IMPLIED WARRANTIES INCLUDING, BUT NOT LIMITED TO," >> README.md
+        echo "IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE." >> README.md
+        echo "YOU ASSUME ALL RISK FOR ANY ISSUES OR DAMAGE." >> README.md
+        echo "```" >> README.md
+        echo "" >> README.md
+        echo "### Known Issues (may include):" >> README.md
+        echo "- Cnchi installer may give traceback errors" >> README.md
+        echo "- NEW Cnchi GTK4 from cnchi-dev branch (may be unstable)" >> README.md
+        echo "- Syslinux/bootloader errors" >> README.md
+        echo "- Broken desktop environments" >> README.md
+        echo "- Missing or broken packages" >> README.md
+        echo "- Any other bug that slipped in today" >> README.md
+        echo "" >> README.md
+        echo "### Issues" >> README.md
+        echo "DO NOT report issues for nightly builds - fix them yourself or wait for the next stable release." >> README.md
+        echo "" >> README.md
+        echo "### Build Info" >> README.md
+        echo "- **Date**: ${DATE}" >> README.md
+        echo "- **Type**: nightly build" >> README.md
+        echo "- **Status**: UNTESTED" >> README.md
+        echo "" >> README.md
+        echo "## Installation (at your own risk!)" >> README.md
+        echo "1. Boot from ISO" >> README.md
+        echo "2. Select desktop environment" >> README.md
+        echo "3. Run Cnchi installer" >> README.md
+        echo "4. Do not come crying to us if it breaks" >> README.md
+        echo "" >> README.md
+        echo "## Source" >> README.md
+        echo "- ISO Build: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO" >> README.md
+        echo "- Cnchi: https://github.com/Antergos-NeXT/Cnchi" >> README.md
 
         # Upload to nightly folder (overwrite allowed)
         rsync -avP --delete "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
