@@ -1,0 +1,11 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Category": "",
+        "Description": "Pulsar Dark",
+        "Id": "com.pulsar.breezedark.desktop",
+        "License": "GPLv2+",
+        "Name": "Pulsar Dark",
+        "Website": "https://www.kde.org"
+    }
+}

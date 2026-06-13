@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="Antergos_NeXT"
-iso_label="ANTERGOS_$(date +%Y%m)"
-iso_publisher="Antergos NeXT <https://github.com/Antergos-NeXT>"
-iso_application="Antergos NeXT Live/Rescue CD"
+iso_name="Pulsar"
+iso_label="PULSAR_$(date +%Y%m)"
+iso_publisher="Pulsar <https://github.com/Pulsar-OS>"
+iso_application="Pulsar Live/Rescue CD"
 iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')

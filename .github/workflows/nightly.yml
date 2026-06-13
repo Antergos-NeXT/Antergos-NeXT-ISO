@@ -46,7 +46,7 @@ jobs:
     - name: Upload ISO artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Antergos-NeXT-Nightly
+        name: Pulsar-OS-Nightly
         path: out/
 
     - name: Upload to SourceForge
@@ -61,7 +61,7 @@ jobs:
 
         # Find ISO
         ISO=$(ls out/*-nightly*.iso | head -1)
-        REMOTE_DIR="/home/frs/project/antergos-next/nightly"
+        REMOTE_DIR="/home/frs/project/pulsar/nightly"
 
         # Validate ISO exists
         if [[ -z "$ISO" || ! -f "$ISO" ]]; then
@@ -83,7 +83,7 @@ jobs:
 
         # Create README
         DATE=$(date +%Y.%m.%d)
-        echo "# ⚠️ Antergos NeXT Nightly ISO" > README.md
+        echo "# ⚠️ Pulsar Nightly ISO" > README.md
         echo "" >> README.md
         echo "## ⚠️ WARNING - NOT FOR PRODUCTION USE" >> README.md
         echo "" >> README.md
@@ -126,8 +126,8 @@ jobs:
         echo "4. Do not come crying to us if it breaks" >> README.md
         echo "" >> README.md
         echo "## Source" >> README.md
-        echo "- ISO Build: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO" >> README.md
-        echo "- Cnchi: https://github.com/Antergos-NeXT/Cnchi" >> README.md
+        echo "- ISO Build: https://github.com/Pulsar-OS/pulsar-iso" >> README.md
+        echo "- Cnchi: https://github.com/Pulsar-OS/cnchi" >> README.md
 
         # Upload to nightly folder (overwrite allowed)
         rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o StrictHostKeyChecking=no" --delete "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"

@@ -5,7 +5,7 @@ BUILD_USER="iso-builder-temp"
 mv profiledef.sh_auto profiledef.sh
 
 # use different wallpaper in case (uncomment and edit url to do so)
-#wget -qN --show-progress -O "airootfs/root/livewall.png" "https://raw.githubusercontent.com/Antergos/wallpapers/master/antergos-wallpaper.png"
+#wget -qN --show-progress -O "airootfs/root/livewall.png" "https://raw.githubusercontent.com/Pulsar/wallpapers/master/pulsar-wallpaper.png"
 
 echo "---> add date to wallpaper ---> "
 cp airootfs/root/livewall.png airootfs/root/livewall-original.png
@@ -21,7 +21,7 @@ magick airootfs/root/livewall.png \
 echo "<--- add date to wallpaper done <--- "
 
 echo "---> Get wallpaper for installed system ---> "
-wget -qN --show-progress -P "airootfs/root/" "https://raw.githubusercontent.com/Antergos/wallpapers/master/antergos-wallpaper.png"
+wget -qN --show-progress -P "airootfs/root/" "https://raw.githubusercontent.com/Pulsar/wallpapers/master/pulsar-wallpaper.png"
 
 echo "---> Make sure build scripts are executable ---> "
 chmod +x "./"{"mkarchiso","run_before_squashfs.sh"}

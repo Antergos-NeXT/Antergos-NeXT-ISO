@@ -56,8 +56,8 @@ Main() {
                     local pkgs=(/usr/share/packages/{$pkg,libxvmc}-*.pkg.tar.zst)
                     sudo pacman -U --noconfirm "${pkgs[@]}"
                     echo "==> $progname: disable compositor for legacy intel in KDE live session"
-                    mv /home/antergos/.config/intel-kwinrc /home/antergos/.config/kwinrc
-                    chown antergos:antergos /home/antergos/.config/kwinrc
+                    mv /home/pulsar/.config/intel-kwinrc /home/pulsar/.config/kwinrc
+                    chown pulsar:pulsar /home/pulsar/.config/kwinrc
                     return 0
                 fi
             fi

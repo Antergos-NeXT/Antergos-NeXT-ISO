@@ -73,12 +73,12 @@ echo "---> generate mirrorlist done ---> "
 pacman -Syy
 echo "---> updating package db done ---> "
 
-echo "---> backup bash configs from skel to replace after antergos creation --->"
+echo "---> backup bash configs from skel to replace after pulsar creation --->"
 mkdir -p "/root/filebackups/"
 cp -af "/etc/skel/"{".bashrc",".bash_profile"} "/root/filebackups/"
 
-echo "---> Install antergos skel (in case of conflicts use overwrite) --->"
-pacman -U --noconfirm --overwrite "/etc/skel/.bash_profile","/etc/skel/.bashrc","/etc/skel/.config/gtk-3.0/settings.ini","/etc/skel/.config/kdeglobals" -- "/root/antergos-skel-liveuser/"*".pkg.tar.zst"
+echo "---> Install pulsar skel (in case of conflicts use overwrite) --->"
+pacman -U --noconfirm --overwrite "/etc/skel/.bash_profile","/etc/skel/.bashrc","/etc/skel/.config/gtk-3.0/settings.ini","/etc/skel/.config/kdeglobals" -- "/root/pulsar-skel-liveuser/"*".pkg.tar.zst"
 echo "---> start validate skel files --->"
 ls /etc/skel/.*
 ls /etc/skel/
@@ -92,23 +92,23 @@ ln -sf "/usr/share/zoneinfo/UTC" "/etc/localtime"
 echo "---> Set root permission and shell --->"
 usermod -s /usr/bin/bash root
 
-echo "---> Create antergos --->"
-useradd -m -p "" -g 'antergos' -G 'sys,rfkill,wheel,uucp,nopasswdlogin,adm,tty' -s /bin/bash antergos
+echo "---> Create pulsar --->"
+useradd -m -p "" -g 'pulsar' -G 'sys,rfkill,wheel,uucp,nopasswdlogin,adm,tty' -s /bin/bash pulsar
 if [[ -f "/root/liveuser.png" ]]; then
-  cp "/root/liveuser.png" "/var/lib/AccountsService/icons/antergos"
+  cp "/root/liveuser.png" "/var/lib/AccountsService/icons/pulsar"
 fi
 
-echo "---> Remove antergos skel to clean for target skel --"
+echo "---> Remove pulsar skel to clean for target skel --"
 pacman -Sy
-pacman -Rns --noconfirm -- "antergos-skel-liveuser"
-rm -rf "/root/antergos-skel-liveuser"
+pacman -Rns --noconfirm -- "pulsar-skel-liveuser"
+rm -rf "/root/pulsar-skel-liveuser"
 
 echo "---> setup theming for root user --->"
 cp -a "/root/root-theme" "/root/.config"
 rm -R "/root/root-theme"
 
-echo "---> Add Antergos version to motd --->"
-echo "Antergos NeXT $(date +%Y.%m.%d)" >> "/etc/motd"
+echo "---> Add Pulsar version to motd --->"
+echo "Pulsar $(date +%Y.%m.%d)" >> "/etc/motd"
 echo "------------------" >> "/etc/motd"
 
 echo "---> Install locally built packages on ISO (place packages under airootfs/root/packages) --->"
@@ -134,20 +134,20 @@ echo " --> per default now in airootfs/etc/systemd/system/multi-user.target.want
 systemctl set-default multi-user.target
 
 echo "---> Set wallpaper for live-session and installed system --->"
-mkdir -p "/usr/share/antergos/backgrounds"
-mv "/root/antergos-wallpaper.png" "/usr/share/antergos/backgrounds/antergos-wallpaper.png"
-mv "/root/livewall.png" "/usr/share/antergos/backgrounds/antergos-wallpaper-live.png"
-chmod 644 "/usr/share/antergos/backgrounds/"*".png"
+mkdir -p "/usr/share/pulsar/backgrounds"
+mv "/root/pulsar-wallpaper.png" "/usr/share/pulsar/backgrounds/pulsar-wallpaper.png"
+mv "/root/livewall.png" "/usr/share/pulsar/backgrounds/pulsar-wallpaper-live.png"
+chmod 644 "/usr/share/pulsar/backgrounds/"*".png"
 
 echo "---> Register wallpaper for Plasma (overwrite default KDE Next/ wallpaper) --->"
 for res in 1920x1080 3840x2160 1440x2960 5120x2880 7680x2160; do
-  cp "/usr/share/antergos/backgrounds/antergos-wallpaper-live.png" "/usr/share/wallpapers/Next/contents/images/${res}.png"
+  cp "/usr/share/pulsar/backgrounds/pulsar-wallpaper-live.png" "/usr/share/wallpapers/Next/contents/images/${res}.png"
 done
 
-echo "---> Install Antergos icon --->"
-mkdir -p "/usr/share/antergos"
+echo "---> Install Pulsar icon --->"
+mkdir -p "/usr/share/pulsar"
 if [[ -f "/root/liveuser.png" ]]; then
-  cp "/root/liveuser.png" "/usr/share/antergos/antergos-icon.png"
+  cp "/root/liveuser.png" "/usr/share/pulsar/pulsar-icon.png"
   rm "/root/liveuser.png"
 fi
 
@@ -169,7 +169,7 @@ pacman -Qs | grep "/linux " | cut -c7- >> iso_package_versions
 pacman -Qs | grep "/mesa " | cut -c7- >> iso_package_versions
 pacman -Qs | grep "/xorg-server " | cut -c7- >> iso_package_versions
 pacman -Qs | grep "/nvidia-utils " | cut -c7- >> iso_package_versions
-mv "iso_package_versions" "/home/antergos/"
+mv "iso_package_versions" "/home/pulsar/"
 
 echo "---> Clean pacman log and package cache --->"
 rm "/var/log/pacman.log"
@@ -184,18 +184,18 @@ sed -i 's|^Exec=cnchi$|Exec=sudo -E cnchi|' "/usr/share/applications/cnchi.deskt
 
 echo "---> Cnchi regain_privileges fix already applied upstream (commit 524bcc82) --->"
 
-echo "---> Set Antergos NeXT os-release --->"
+echo "---> Set Pulsar os-release --->"
 cat > "/usr/lib/os-release" << 'OSEOF'
-NAME="Antergos NeXT"
-PRETTY_NAME="Antergos NeXT"
-ID=antergos
+NAME="Pulsar"
+PRETTY_NAME="Pulsar"
+ID=pulsar
 ID_LIKE="arch"
 BUILD_ID=rolling
 VERSION_ID="rolling"
-HOME_URL="https://github.com/Antergos-NeXT"
-SUPPORT_URL="https://github.com/Antergos-NeXT"
-BUG_REPORT_URL="https://github.com/Antergos-NeXT/issues"
-LOGO=antergos-icon
+HOME_URL="https://github.com/Pulsar-OS"
+SUPPORT_URL="https://github.com/Pulsar-OS"
+BUG_REPORT_URL="https://github.com/Pulsar-OS/issues"
+LOGO=pulsar-icon
 OSEOF
 
 echo "############################"

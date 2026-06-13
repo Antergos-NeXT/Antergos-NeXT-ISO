@@ -2,19 +2,19 @@
 
 
 ---
-# Antergos NeXT (2026)
+# Pulsar (2026)
 
-Forked from EndeavourOS-ISO. Full rebrand to Antergos NeXT.
+Forked from EndeavourOS-ISO. Full rebrand to Pulsar.
 
-* renamed ISO to `Antergos_NeXT`, updated labels and metadata
-* replaced all branding: EndeavourOS → Antergos throughout live environment
-* replaced `endeavouros-skel-liveuser` with `antergos-skel-liveuser` (KDE theme, look-and-feel, wallpapers)
+* renamed ISO to `Pulsar`, updated labels and metadata
+* replaced all branding: EndeavourOS → Pulsar throughout live environment
+* replaced `endeavouros-skel-liveuser` with `pulsar-skel-liveuser` (KDE theme, look-and-feel, wallpapers)
 * removed `[endeavouros]` repository from both build and live pacman configs
 * removed Calamares and all EOS-specific utilities from package list
-* swapped wallpapers and liveuser icon with Antergos originals
+* swapped wallpapers and liveuser icon with Pulsar originals
 * updated syslinux boot labels, UEFI boot titles, and PXE config
 * removed EndeavourOS mirrorlist and keyring dependencies
-* replaced EndeavourOS release file with `/usr/lib/antergos-release`
+* replaced EndeavourOS release file with `/usr/lib/pulsar-release`
 * updated mkarchiso markers and `profiledef.sh_auto`
 * cleaned up GitHub workflows (Codeberg mirror), deleted FUNDING.yml
 * rewrote README, preserved CHANGELOG history from upstream

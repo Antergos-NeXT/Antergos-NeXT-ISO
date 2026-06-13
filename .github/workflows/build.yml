@@ -46,7 +46,7 @@ jobs:
     - name: Upload ISO artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Antergos-NeXT-ISO
+        name: Pulsar-OS-ISO
         path: out/
 
     - name: Upload to SourceForge
@@ -63,7 +63,7 @@ jobs:
         # Find ISO
         ISO=$(ls out/*.iso | head -1)
         DATE=$(date +%Y.%m.%d)
-        REMOTE_DIR="/home/frs/project/antergos-next/${DATE}"
+        REMOTE_DIR="/home/frs/project/pulsar/${DATE}"
 
         # Validate ISO exists
         if [[ -z "$ISO" || ! -f "$ISO" ]]; then
@@ -109,7 +109,7 @@ jobs:
         ISO="$NEW_ISO"
 
         # Create README
-        echo "# Antergos NeXT Live ISO" > README.md
+        echo "# Pulsar Live ISO" > README.md
         echo "" >> README.md
         echo "## Build Info" >> README.md
         echo "- **Date**: ${DATE}" >> README.md
@@ -126,11 +126,11 @@ jobs:
         echo "3. Run Cnchi installer" >> README.md
         echo "" >> README.md
         echo "## Issues" >> README.md
-        echo "Report at: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO/issues" >> README.md
+        echo "Report at: https://github.com/Pulsar-OS/pulsar-iso/issues" >> README.md
         echo "" >> README.md
         echo "## Source" >> README.md
-        echo "- ISO Build: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO" >> README.md
-        echo "- Cnchi: https://github.com/Antergos-NeXT/Cnchi" >> README.md
+        echo "- ISO Build: https://github.com/Pulsar-OS/pulsar-iso" >> README.md
+        echo "- Cnchi: https://github.com/Pulsar-OS/cnchi" >> README.md
 
         # Upload ISO + README
         rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"

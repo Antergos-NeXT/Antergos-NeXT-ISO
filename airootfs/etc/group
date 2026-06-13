@@ -1,8 +1,8 @@
 root:x:0:root
-adm:x:4:antergos
-wheel:x:10:antergos
-uucp:x:14:antergos
-nopasswdlogin:x:966:antergos
-rfkill:x:983:antergos
-sys:x:3:bin,antergos
-antergos:x:1000:antergos
+adm:x:4:pulsar
+wheel:x:10:pulsar
+uucp:x:14:pulsar
+nopasswdlogin:x:966:pulsar
+rfkill:x:983:pulsar
+sys:x:3:bin,pulsar
+pulsar:x:1000:pulsar

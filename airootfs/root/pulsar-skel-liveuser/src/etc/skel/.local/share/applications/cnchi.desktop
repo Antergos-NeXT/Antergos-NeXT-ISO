@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install Pulsar
+GenericName=System Installer
+Comment=Cnchi — Pulsar System Installer
+Keywords=cnchi;system;installer;
+TryExec=cnchi
+Exec=sudo -E cnchi
+Categories=Qt;System;
+Icon=cnchi
+Terminal=false
+SingleMainWindow=true
+StartupNotify=true

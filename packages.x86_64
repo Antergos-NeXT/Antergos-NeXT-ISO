@@ -210,7 +210,7 @@ bluedevil
 breeze-gtk
 dolphin
 dolphin-plugins
-#antergos-konsole-colors
+#pulsar-konsole-colors
 ffmpegthumbs
 fwupd
 gwenview
@@ -270,11 +270,11 @@ ttf-dejavu
 ttf-liberation
 ttf-opensans
 
-# ANTERGOS
+# PULSAR
 
 ## General
-antergos-wallpapers
-antergos-next-desktop-settings
+pulsar-wallpapers
+pulsar-desktop-settings
 yay
 
 ## Installer
