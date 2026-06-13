@@ -54,7 +54,7 @@ jobs:
         SF_SSH_KEY: ${{ secrets.SF_SSH_KEY }}
       run: |
         mkdir -p ~/.ssh
-        printf '%s' "$SF_SSH_KEY" > ~/.ssh/id_ed25519
+        echo "$SF_SSH_KEY" > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan -t rsa,ed25519 frs.sourceforge.net >> ~/.ssh/known_hosts 2>/dev/null || true
         chmod 644 ~/.ssh/known_hosts
