@@ -5,7 +5,7 @@ pkgver=1.0
 pkgrel=2
 pkgdesc='Liveuser specific skel setup for KDE Antergos NeXT'
 arch=('any')
-url='https://github.com/antergos/antergos-iso-next'
+url='https://github.com/Antergos-NeXT/Antergos-NeXT-ISO'
 license=('GPL3')
 source=()
 
