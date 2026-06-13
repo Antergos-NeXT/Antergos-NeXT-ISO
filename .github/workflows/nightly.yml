@@ -41,7 +41,7 @@ jobs:
     - name: Build ISO
       run: |
         ./mkarchiso -v "."
-        mv out/*.iso out/$(echo out/*.iso | sed 's/-x86_64/-x86_64-nightly/')
+        mv out/*.iso out/$(basename out/*.iso | sed 's/-x86_64/-x86_64-nightly/')
 
     - name: Upload ISO artifact
       uses: actions/upload-artifact@v4
