@@ -87,35 +87,51 @@ jobs:
           fi
         fi
 
-        # Check if ISO already exists
+        # Check if ISO already exists and auto-increment release number
+        RELEASE=1
         if ssh antergos-txen@frs.sourceforge.net ls "${REMOTE_DIR}/"*.iso &>/dev/null; then
-          echo "ISO already exists in ${DATE}, skipping upload"
-        else
-          # Create README
-          echo "# Antergos NeXT Live ISO" > README.md
-          echo "" >> README.md
-          echo "## Build Info" >> README.md
-          echo "- **Date**: ${DATE}" >> README.md
-          echo "- **Version**: rolling" >> README.md
-          echo "- **Architecture**: x86_64" >> README.md
-          echo "" >> README.md
-          echo "## Desktop Environments" >> README.md
-          echo "- KDE Plasma (default)" >> README.md
-          echo "- GNOME, XFCE, Cinnamon, and more..." >> README.md
-          echo "" >> README.md
-          echo "## Installation" >> README.md
-          echo "1. Boot from ISO" >> README.md
-          echo "2. Select desktop environment" >> README.md
-          echo "3. Run Cnchi installer" >> README.md
-          echo "" >> README.md
-          echo "## Issues" >> README.md
-          echo "Report at: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO/issues" >> README.md
-          echo "" >> README.md
-          echo "## Source" >> README.md
-          echo "- ISO Build: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO" >> README.md
-          echo "- Cnchi: https://github.com/Antergos-NeXT/Cnchi" >> README.md
-
-          # Upload ISO + README
-          rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
-          echo "Uploaded to ${REMOTE_DIR}"
+          EXISTING=$(ssh antergos-txen@frs.sourceforge.net ls "${REMOTE_DIR}/"*.iso 2>/dev/null)
+          for f in $EXISTING; do
+            if echo "$f" | grep -q "release-"; then
+              N=$(echo "$f" | sed 's/.*release-\([0-9]*\)\.iso/\1/')
+              if [ "$N" -gt "$RELEASE" ]; then RELEASE=$N; fi
+            fi
+          done
+          RELEASE=$((RELEASE + 1))
+          echo "Existing ISOs found, uploading as release #${RELEASE}"
         fi
+
+        # Rename ISO with release number
+        ISO_BASENAME=$(basename "$ISO" .iso)
+        ISO_DIR=$(dirname "$ISO")
+        NEW_ISO="${ISO_DIR}/${ISO_BASENAME}-release-${RELEASE}.iso"
+        mv "$ISO" "$NEW_ISO"
+        ISO="$NEW_ISO"
+
+        # Create README
+        echo "# Antergos NeXT Live ISO" > README.md
+        echo "" >> README.md
+        echo "## Build Info" >> README.md
+        echo "- **Date**: ${DATE}" >> README.md
+        echo "- **Version**: rolling (release ${RELEASE})" >> README.md
+        echo "- **Architecture**: x86_64" >> README.md
+        echo "" >> README.md
+        echo "## Desktop Environments" >> README.md
+        echo "- KDE Plasma (default)" >> README.md
+        echo "- GNOME, XFCE, Cinnamon, and more..." >> README.md
+        echo "" >> README.md
+        echo "## Installation" >> README.md
+        echo "1. Boot from ISO" >> README.md
+        echo "2. Select desktop environment" >> README.md
+        echo "3. Run Cnchi installer" >> README.md
+        echo "" >> README.md
+        echo "## Issues" >> README.md
+        echo "Report at: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO/issues" >> README.md
+        echo "" >> README.md
+        echo "## Source" >> README.md
+        echo "- ISO Build: https://github.com/Antergos-NeXT/Antergos-NeXT-ISO" >> README.md
+        echo "- Cnchi: https://github.com/Antergos-NeXT/Cnchi" >> README.md
+
+        # Upload ISO + README
+        rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
+        echo "Uploaded ${ISO} to ${REMOTE_DIR}"
