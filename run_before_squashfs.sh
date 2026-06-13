@@ -192,9 +192,9 @@ ID=pulsar
 ID_LIKE="arch"
 BUILD_ID=rolling
 VERSION_ID="rolling"
-HOME_URL="https://github.com/Pulsar-OS"
-SUPPORT_URL="https://github.com/Pulsar-OS"
-BUG_REPORT_URL="https://github.com/Pulsar-OS/issues"
+HOME_URL="https://github.com/Pulsar-Linux"
+SUPPORT_URL="https://github.com/Pulsar-Linux"
+BUG_REPORT_URL="https://github.com/Pulsar-Linux/issues"
 LOGO=pulsar-icon
 OSEOF
 

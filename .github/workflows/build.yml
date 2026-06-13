@@ -46,7 +46,7 @@ jobs:
     - name: Upload ISO artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Pulsar-OS-ISO
+        name: Pulsar-Linux-ISO
         path: out/
 
     - name: Upload to SourceForge
@@ -126,11 +126,11 @@ jobs:
         echo "3. Run Cnchi installer" >> README.md
         echo "" >> README.md
         echo "## Issues" >> README.md
-        echo "Report at: https://github.com/Pulsar-OS/pulsar-iso/issues" >> README.md
+        echo "Report at: https://github.com/Pulsar-Linux/pulsar-iso/issues" >> README.md
         echo "" >> README.md
         echo "## Source" >> README.md
-        echo "- ISO Build: https://github.com/Pulsar-OS/pulsar-iso" >> README.md
-        echo "- Cnchi: https://github.com/Pulsar-OS/cnchi" >> README.md
+        echo "- ISO Build: https://github.com/Pulsar-Linux/pulsar-iso" >> README.md
+        echo "- Cnchi: https://github.com/Pulsar-Linux/cnchi" >> README.md
 
         # Upload ISO + README
         rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"

@@ -1,6 +1,6 @@
 # Pulsar ISO
 
-[![Build ISO](https://github.com/Pulsar-OS/pulsar-iso/actions/workflows/build.yml/badge.svg)](https://github.com/Pulsar-OS/pulsar-iso/actions/workflows/build.yml)
+[![Build ISO](https://github.com/Pulsar-Linux/pulsar-iso/actions/workflows/build.yml/badge.svg)](https://github.com/Pulsar-Linux/pulsar-iso/actions/workflows/build.yml)
 [![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
 [![Maintenance](https://img.shields.io/maintenance/yes/2026.svg)]()
 [![Arch Linux](https://img.shields.io/badge/arch%20linux-rolling-1793d1.svg)](https://archlinux.org)
@@ -35,7 +35,7 @@ Join us on Matrix: [#pulsar:matrix.org](https://matrix.to/#/%23pulsar:matrix.org
 ISO images exceed GitHub's 2 GB release limit. They are uploaded to **SourceForge**
 [![Download pulsar](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/pulsar/files/latest/download)
 
-**⚠️ Early releases may have incomplete DE package lists.** The latest `packages.xml` is always in the [Cnchi repo](https://github.com/Pulsar-OS/cnchi/blob/0.16.x/data/packages.xml). Building from source after a fresh clone ensures you have the most up-to-date package selection.
+**⚠️ Early releases may have incomplete DE package lists.** The latest `packages.xml` is always in the [Cnchi repo](https://github.com/Pulsar-Linux/cnchi/blob/0.16.x/data/packages.xml). Building from source after a fresh clone ensures you have the most up-to-date package selection.
 
 ## How to build
 
@@ -43,8 +43,8 @@ You need an Arch-based system with `archiso` available.
 
 ```bash
 sudo pacman -S archiso git squashfs-tools --needed
-git clone https://github.com/Pulsar-OS/pulsar-iso.git
-cd Pulsar-OS-ISO
+git clone https://github.com/Pulsar-Linux/pulsar-iso.git
+cd Pulsar-Linux-ISO
 ./prepare.sh
 sudo ./mkarchiso -v "."
 ```
@@ -58,16 +58,16 @@ The ISO uses the `pulsar-pkgs` repo for custom packages (Cnchi, keyring, mirrorl
 ```ini
 [pulsar-pkgs]
 SigLevel = Optional TrustAll
-Server = https://Pulsar-OS.github.io/pulsar-pkgs/$repo/os/$arch
-Server = https://Pulsar-OS.github.io/pulsar-pkgs
+Server = https://Pulsar-Linux.github.io/pulsar-pkgs/$repo/os/$arch
+Server = https://Pulsar-Linux.github.io/pulsar-pkgs
 ```
 
 ## Sources
 
 - [EndeavourOS-ISO](https://github.com/endeavouros-team/EndeavourOS-ISO) — base ISO build system
 - [Arch-ISO](https://gitlab.archlinux.org/archlinux/archiso) — archiso tools
-- [Cnchi](https://github.com/Pulsar-OS/cnchi) — our patched Cnchi fork
-- [pulsar-pkgs](https://github.com/Pulsar-OS/pulsar-pkgs) — custom package repo
+- [Cnchi](https://github.com/Pulsar-Linux/cnchi) — our patched Cnchi fork
+- [pulsar-pkgs](https://github.com/Pulsar-Linux/pulsar-pkgs) — custom package repo
 - [Pulsar wallpapers](https://github.com/Pulsar/wallpapers) — original wallpapers
 
 ## License

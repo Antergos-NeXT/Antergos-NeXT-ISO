@@ -46,7 +46,7 @@ jobs:
     - name: Upload ISO artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Pulsar-OS-Nightly
+        name: Pulsar-Linux-Nightly
         path: out/
 
     - name: Upload to SourceForge
@@ -126,8 +126,8 @@ jobs:
         echo "4. Do not come crying to us if it breaks" >> README.md
         echo "" >> README.md
         echo "## Source" >> README.md
-        echo "- ISO Build: https://github.com/Pulsar-OS/pulsar-iso" >> README.md
-        echo "- Cnchi: https://github.com/Pulsar-OS/cnchi" >> README.md
+        echo "- ISO Build: https://github.com/Pulsar-Linux/pulsar-iso" >> README.md
+        echo "- Cnchi: https://github.com/Pulsar-Linux/cnchi" >> README.md
 
         # Upload to nightly folder (overwrite allowed)
         rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o StrictHostKeyChecking=no" --delete "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
