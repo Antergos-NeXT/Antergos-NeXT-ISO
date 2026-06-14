@@ -11,6 +11,8 @@ Modern Arch-Based live installer ISO, based on the maintained EndeavourOS-ISO.
 
 Provides a live KDE Plasma environment to install Arch Linux using **Cnchi**, the original Antergos installer that was used all the way to 2019 — now patched for modern Python, with multi-DE support and the original installer experience.
 
+**⚠️⚠️⚠️ Security & Transparency:All Pulsar Linux ISOs are built automatically using GitHub Actions CI directly from the public source code. This ensures a 100% clean, transparent, and tamper-proof build process. The final images are then uploaded to SourceForge for free hosting.**
+
 ## Desktop Editions
 
 | Desktop | Edition | Status |
@@ -63,7 +65,7 @@ Server = https://Pulsar-Linux.github.io/pulsar-pkgs
 
 - [EndeavourOS-ISO](https://github.com/endeavouros-team/EndeavourOS-ISO) — base ISO build system
 - [Arch-ISO](https://gitlab.archlinux.org/archlinux/archiso) — archiso tools
-- [Cnchi](https://github.com/Pulsar-Linux/cnchi) — our patched Cnchi fork
+- [Cnchi](https://github.com/Pulsar-Linux/Cnchi) — our patched Cnchi fork
 - [pulsar-pkgs](https://github.com/Pulsar-Linux/pulsar-pkgs) — custom package repo
 - [Pulsar wallpapers](https://github.com/antergos/wallpapers) — original wallpapers (borrowed from Antergos placeholder until i make wallpapers)
 
